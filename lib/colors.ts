@@ -62,16 +62,16 @@ const seasonPalettes: Record<Season, SeasonPalette> = {
 
 const skyByTime: Record<TimeOfDay, SkyPalette> = {
   dawn: {
-    top: "#3a4a62",
-    mid: "#7a5a52",
-    bottom: "#4a5a52",
-    glow: "rgba(180, 140, 110, 0.25)",
+    top: "#4a6a8a",
+    mid: "#c48a6a",
+    bottom: "#f0c8a0",
+    glow: "rgba(255, 200, 150, 0.4)",
   },
   day: {
-    top: "#1e3a4a",
-    mid: "#2d5568",
-    bottom: "#3a6a58",
-    glow: "rgba(90, 150, 130, 0.2)",
+    top: "#5a9ec8",
+    mid: "#87ceeb",
+    bottom: "#b8dce8",
+    glow: "rgba(255, 255, 255, 0.3)",
   },
   dusk: {
     top: "#2a2848",
