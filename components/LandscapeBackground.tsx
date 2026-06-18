@@ -35,7 +35,10 @@ export function LandscapeBackground({ palette }: LandscapeBackgroundProps) {
             fill={palette.ground}
             opacity={0.6}
           />
-          <rect x={-200} y={460} width={1600} height={60} fill={palette.ground} />
+        </g>
+        {/* Ground and undergrowth: horizontal parallax only so the bottom stays pinned */}
+        <g transform={`translate(${nearX} 0)`}>
+          <rect x={-200} y={420} width={1600} height={130} fill={palette.ground} />
           <ellipse cx={600} cy={470} rx={700} ry={40} fill={palette.mist} />
           <ellipse cx={200} cy={475} rx={80} ry={15} fill={palette.leaf} opacity={0.3} />
           <ellipse cx={600} cy={478} rx={120} ry={18} fill={palette.leafAccent} opacity={0.25} />
@@ -73,7 +76,7 @@ function useParallax() {
       const rawX = (e.clientX / window.innerWidth - 0.5) * 2;
       const rawY = (e.clientY / window.innerHeight - 0.5) * 2;
       const clamp = (v: number) => Math.max(-0.85, Math.min(0.85, v));
-      setOffset({ x: clamp(rawX), y: clamp(rawY) });
+      setOffset({ x: clamp(rawX), y: clamp(rawY * 0.5) });
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
