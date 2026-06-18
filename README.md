@@ -73,6 +73,14 @@ On the server, unpack (if using the archive), copy `.env.example` to `.env`, set
 ./start.sh
 ```
 
+### PM2 (recommended)
+
+```bash
+pm2 delete sylvanova 2>/dev/null || true
+pm2 start ecosystem.config.cjs
+pm2 save
+```
+
 ### Manual build
 
 ```bash

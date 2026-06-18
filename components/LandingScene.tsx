@@ -5,6 +5,7 @@ import { Hero } from "@/components/Hero";
 import { LandscapeBackground } from "@/components/LandscapeBackground";
 import { ParticleField } from "@/components/ParticleField";
 import { SkyBackground } from "@/components/SkyBackground";
+import { useMounted } from "@/hooks/useMounted";
 import { useSeasonCycle } from "@/hooks/useSeasonCycle";
 import { useTimeOfDay } from "@/hooks/useTimeOfDay";
 import { getThemePalette } from "@/lib/colors";
@@ -12,8 +13,9 @@ import { getThemePalette } from "@/lib/colors";
 const themePalette = getThemePalette();
 
 export function LandingScene() {
+  const mounted = useMounted();
   const timeOfDay = useTimeOfDay();
-  const { season, palette } = useSeasonCycle();
+  const { season, palette } = useSeasonCycle(mounted);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -21,6 +23,10 @@ export function LandingScene() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     );
   }, []);
+
+  if (!mounted) {
+    return <div className="landing-scene landing-scene--loading" aria-busy="true" />;
+  }
 
   return (
     <div

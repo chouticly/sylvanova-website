@@ -13,6 +13,7 @@ export function SkyBackground({ timeOfDay }: SkyBackgroundProps) {
   const [stars, setStars] = useState<{ x: number; y: number; size: number; opacity: number }[]>(
     []
   );
+  const [starsReady, setStarsReady] = useState(false);
 
   useEffect(() => {
     const generated = Array.from({ length: 60 }, () => ({
@@ -22,9 +23,11 @@ export function SkyBackground({ timeOfDay }: SkyBackgroundProps) {
       opacity: Math.random() * 0.6 + 0.2,
     }));
     setStars(generated);
+    setStarsReady(true);
   }, []);
 
-  const showStars = timeOfDay === "night" || timeOfDay === "dawn";
+  const showStars =
+    starsReady && (timeOfDay === "night" || timeOfDay === "dawn");
 
   return (
     <div

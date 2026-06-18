@@ -55,35 +55,25 @@ function computeSeasonState(elapsed: number, reducedMotion: boolean): SeasonStat
   };
 }
 
-export function useSeasonCycle(): SeasonState {
+export function useSeasonCycle(active = true): SeasonState {
   const [state, setState] = useState<SeasonState>(() =>
     computeSeasonState(0, false)
   );
 
   useEffect(() => {
+    if (!active) return;
+
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
     const start = performance.now();
-    let lastUpdate = 0;
 
-    const tick = (now: number) => {
-      if (now - lastUpdate >= 100) {
-        const elapsed = now - start;
-        setState(computeSeasonState(elapsed, reducedMotion));
-        lastUpdate = now;
-      }
-    };
+    const id = window.setInterval(() => {
+      setState(computeSeasonState(performance.now() - start, reducedMotion));
+    }, 100);
 
-    let animId: number;
-    const loop = (now: number) => {
-      tick(now);
-      animId = requestAnimationFrame(loop);
-    };
-    animId = requestAnimationFrame(loop);
-
-    return () => cancelAnimationFrame(animId);
-  }, []);
+    return () => window.clearInterval(id);
+  }, [active]);
 
   return state;
 }

@@ -36,6 +36,10 @@ body {
   overflow: hidden;
 }
 
+.landing-scene--loading {
+  background: linear-gradient(180deg, #1a2040 0%, #2a3050 50%, #3d5c32 100%);
+}
+
 .sky-background {
   position: absolute;
   inset: 0;

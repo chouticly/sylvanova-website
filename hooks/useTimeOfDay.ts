@@ -17,8 +17,8 @@ export function useTimeOfDay(): TimeOfDay {
   useEffect(() => {
     const update = () => setTimeOfDay(getTimeOfDay());
     update();
-    const id = setInterval(update, 60_000);
-    return () => clearInterval(id);
+    const id = window.setInterval(update, 60_000);
+    return () => window.clearInterval(id);
   }, []);
 
   return timeOfDay;
