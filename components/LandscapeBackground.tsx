@@ -10,6 +10,11 @@ interface LandscapeBackgroundProps {
 export function LandscapeBackground({ palette }: LandscapeBackgroundProps) {
   const { x, y } = useParallax();
 
+  const farX = x * 12;
+  const farY = y * 4;
+  const nearX = x * 24;
+  const nearY = y * 8;
+
   return (
     <div className="landscape-background" aria-hidden>
       <svg
@@ -17,33 +22,25 @@ export function LandscapeBackground({ palette }: LandscapeBackgroundProps) {
         preserveAspectRatio="xMidYMax slice"
         className="landscape-background-svg"
       >
-        <g
-          style={{
-            transform: `translate(${x * 4}px, ${y * 2}px)`,
-          }}
-        >
+        <g transform={`translate(${farX} ${farY})`}>
           <path
-            d="M0,380 L200,280 L400,340 L600,220 L800,300 L1000,250 L1200,320 L1200,520 L0,520 Z"
+            d="M-200,380 L0,380 L200,280 L400,340 L600,220 L800,300 L1000,250 L1200,320 L1400,300 L1400,520 L-200,520 Z"
             fill={palette.ground}
             opacity={0.4}
           />
         </g>
-        <g
-          style={{
-            transform: `translate(${x * 8}px, ${y * 4}px)`,
-          }}
-        >
+        <g transform={`translate(${nearX} ${nearY})`}>
           <path
-            d="M0,420 L300,350 L500,380 L700,310 L900,360 L1200,340 L1200,520 L0,520 Z"
+            d="M-200,420 L0,420 L300,350 L500,380 L700,310 L900,360 L1200,340 L1400,360 L1400,520 L-200,520 Z"
             fill={palette.ground}
             opacity={0.6}
           />
+          <rect x={-200} y={460} width={1600} height={60} fill={palette.ground} />
+          <ellipse cx={600} cy={470} rx={700} ry={40} fill={palette.mist} />
+          <ellipse cx={200} cy={475} rx={80} ry={15} fill={palette.leaf} opacity={0.3} />
+          <ellipse cx={600} cy={478} rx={120} ry={18} fill={palette.leafAccent} opacity={0.25} />
+          <ellipse cx={950} cy={476} rx={90} ry={14} fill={palette.leaf} opacity={0.3} />
         </g>
-        <rect x={0} y={460} width={1200} height={60} fill={palette.ground} />
-        <ellipse cx={600} cy={470} rx={700} ry={40} fill={palette.mist} />
-        <ellipse cx={200} cy={475} rx={80} ry={15} fill={palette.leaf} opacity={0.3} />
-        <ellipse cx={600} cy={478} rx={120} ry={18} fill={palette.leafAccent} opacity={0.25} />
-        <ellipse cx={950} cy={476} rx={90} ry={14} fill={palette.leaf} opacity={0.3} />
       </svg>
     </div>
   );
@@ -73,10 +70,10 @@ function useParallax() {
     }
 
     const onMove = (e: MouseEvent) => {
-      setOffset({
-        x: (e.clientX / window.innerWidth - 0.5) * 2,
-        y: (e.clientY / window.innerHeight - 0.5) * 2,
-      });
+      const rawX = (e.clientX / window.innerWidth - 0.5) * 2;
+      const rawY = (e.clientY / window.innerHeight - 0.5) * 2;
+      const clamp = (v: number) => Math.max(-0.85, Math.min(0.85, v));
+      setOffset({ x: clamp(rawX), y: clamp(rawY) });
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
