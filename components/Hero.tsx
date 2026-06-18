@@ -6,18 +6,20 @@ import { DiscordLogin } from "./DiscordLogin";
 export function Hero() {
   return (
     <main className="hero">
-      <h1 className="hero-wordmark">
-        <span className="hero-wordmark-sylva">Sylva</span>
-        <span className="hero-wordmark-nova">Nova</span>
-      </h1>
-      <p className="hero-tagline">{TAGLINE}</p>
-      <p className="hero-description">
-        SylvaNova is a gaming community that is taking root.
-        <br />
-        We&apos;re building something special, so check back soon
-        <br />
-        ... and tell Ova I said, &quot;Hi.&quot;
-      </p>
+      <div className="hero-copy">
+        <h1 className="hero-wordmark">
+          <span className="hero-wordmark-sylva">Sylva</span>
+          <span className="hero-wordmark-nova">Nova</span>
+        </h1>
+        <p className="hero-tagline">{TAGLINE}</p>
+        <p className="hero-description">
+          SylvaNova is a gaming community that is taking root.
+          <br />
+          We&apos;re building something special, so check back soon
+          <br />
+          ... and tell Ova I said, &quot;Hi.&quot;
+        </p>
+      </div>
       <div className="hero-actions">
         {SHOW_DISCORD_LOGIN && <DiscordLogin />}
         <a

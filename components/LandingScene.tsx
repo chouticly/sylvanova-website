@@ -10,13 +10,12 @@ import { useSeasonCycle } from "@/hooks/useSeasonCycle";
 import { useTimeOfDay } from "@/hooks/useTimeOfDay";
 import { getThemePalette } from "@/lib/colors";
 
-const themePalette = getThemePalette();
-
 export function LandingScene() {
   const mounted = useMounted();
   const timeOfDay = useTimeOfDay();
   const { season, palette } = useSeasonCycle(mounted);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const themePalette = getThemePalette(timeOfDay);
 
   useEffect(() => {
     setReducedMotion(
@@ -31,6 +30,7 @@ export function LandingScene() {
   return (
     <div
       className="landing-scene"
+      data-time-of-day={timeOfDay}
       style={
         {
           "--color-text": themePalette.text,

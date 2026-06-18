@@ -62,16 +62,16 @@ const seasonPalettes: Record<Season, SeasonPalette> = {
 
 const skyByTime: Record<TimeOfDay, SkyPalette> = {
   dawn: {
-    top: "#4a6a8a",
-    mid: "#c48a6a",
-    bottom: "#f0c8a0",
-    glow: "rgba(255, 200, 150, 0.4)",
+    top: "#3a4a62",
+    mid: "#7a5a52",
+    bottom: "#4a5a52",
+    glow: "rgba(180, 140, 110, 0.25)",
   },
   day: {
-    top: "#5a9ec8",
-    mid: "#87ceeb",
-    bottom: "#b8dce8",
-    glow: "rgba(255, 255, 255, 0.3)",
+    top: "#1e3a4a",
+    mid: "#2d5568",
+    bottom: "#3a6a58",
+    glow: "rgba(90, 150, 130, 0.2)",
   },
   dusk: {
     top: "#2a2848",
@@ -96,6 +96,15 @@ const darkThemePalette: ThemePalette = {
   border: "rgba(106, 184, 114, 0.2)",
 };
 
+const brightSkyTextPalette: ThemePalette = {
+  text: "#f4faf4",
+  textMuted: "#c8d4c8",
+  accent: "#7ed487",
+  accentGlow: "rgba(126, 212, 135, 0.45)",
+  surface: "rgba(8, 16, 12, 0.72)",
+  border: "rgba(126, 212, 135, 0.25)",
+};
+
 export function getSeasonPalette(season: Season): SeasonPalette {
   return seasonPalettes[season];
 }
@@ -104,8 +113,10 @@ export function getSkyPalette(time: TimeOfDay): SkyPalette {
   return skyByTime[time];
 }
 
-export function getThemePalette(): ThemePalette {
-  return darkThemePalette;
+export function getThemePalette(time: TimeOfDay = "night"): ThemePalette {
+  return time === "day" || time === "dawn"
+    ? brightSkyTextPalette
+    : darkThemePalette;
 }
 
 function lerpHex(a: string, b: string, t: number): string {
