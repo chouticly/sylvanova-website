@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Hero } from "@/components/Hero";
+import { ShoutboxTrigger } from "@/components/ShoutboxTrigger";
 import { LandscapeBackground } from "@/components/LandscapeBackground";
 import { ParticleField } from "@/components/ParticleField";
 import { SkyBackground } from "@/components/SkyBackground";
@@ -47,6 +48,7 @@ export function LandingScene() {
       <ParticleField season={season} reducedMotion={reducedMotion} />
       <div className="landing-overlay" />
       <Hero />
+      <ShoutboxTrigger reducedMotion={reducedMotion} />
     </div>
   );
 }

@@ -11,6 +11,18 @@ export interface SessionUser {
 export interface SessionData {
   user?: SessionUser;
   oauthState?: string;
+  shoutboxUnlocked?: boolean;
+  shoutboxUnlockedAt?: number;
+  shoutboxLastSendAt?: number;
+}
+
+export const SHOUTBOX_UNLOCK_TTL_MS = 24 * 60 * 60 * 1000;
+
+export function isShoutboxUnlocked(session: SessionData): boolean {
+  if (!session.shoutboxUnlocked || !session.shoutboxUnlockedAt) {
+    return false;
+  }
+  return Date.now() - session.shoutboxUnlockedAt < SHOUTBOX_UNLOCK_TTL_MS;
 }
 
 export const sessionOptions: SessionOptions = {
