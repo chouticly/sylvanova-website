@@ -1,418 +1,210 @@
 /*
- * SylvaNova — Authentik full theme (background + login card)
+ * SylvaNova — Authentik theme (background scene + minimal login panel)
  *
  * Paste into: Admin → System → Brands → [your brand] → Custom CSS
  *
- * Brand settings:
- *   - Title: SylvaNova
- *   - Default flow background: leave EMPTY (this CSS draws the scene)
+ * Setup:
+ *   - Clear "Default flow background" in Brand settings (leave empty)
+ *   - No custom title styling — uses your Brand title as-is
  *
- * Includes:
- *   - Animated sky (night → dawn → day → dusk → night loop, ~20 min)
- *   - Mountain / ground landscape
- *   - Particle-style drift (CSS box-shadow)
- *   - Login card + SylvaNova title styling
- *
- * Note: Authentik Custom CSS cannot run JavaScript, so the sky cycles on a
- * timer rather than your wall clock. Matches the landing page look, not exact local time.
+ * Sky cycles night → dawn → day → dusk (~20 min). CSS-only (not wall-clock time).
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap");
-
-/* Animated sky gradient colors */
-@property --sylva-sky-top {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #0a0e1a;
-}
-
-@property --sylva-sky-mid {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #1a2040;
-}
-
-@property --sylva-sky-bottom {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #2a3050;
-}
-
-@property --sylva-glow-opacity {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0.15;
-}
-
 :root {
-  --sylva-text: #1a2e1a;
-  --sylva-text-muted: #4a5e4a;
-  --sylva-accent: #3d7a45;
-  --sylva-accent-hover: #2f6236;
-  --sylva-accent-glow: rgba(61, 122, 69, 0.35);
-  --sylva-card-bg: #f8faf8;
-  --sylva-card-border: rgba(61, 122, 69, 0.18);
-  --sylva-input-border: rgba(61, 122, 69, 0.25);
-  --sylva-font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --sylva-font-body: "DM Sans", system-ui, -apple-system, sans-serif;
   --sylva-cycle: 1200s;
-
   --ak-flow-background: none !important;
-
-  --pf-c-login__main--BackgroundColor: var(--sylva-card-bg);
-  --pf-v5-c-login__main--BackgroundColor: var(--sylva-card-bg);
-  --pf-c-login__main-footer-band--BackgroundColor: var(--sylva-card-bg);
-  --pf-v5-c-login__main-footer-band--BackgroundColor: var(--sylva-card-bg);
-  --pf-c-card--BackgroundColor: var(--sylva-card-bg);
-  --pf-v5-c-card--BackgroundColor: var(--sylva-card-bg);
   --pf-c-background-image--BackgroundColor: transparent;
   --pf-v5-c-background-image--BackgroundColor: transparent;
+  --pf-c-login__main--BackgroundColor: transparent;
+  --pf-v5-c-login__main--BackgroundColor: transparent;
+  --pf-c-login__main-footer-band--BackgroundColor: transparent;
+  --pf-v5-c-login__main-footer-band--BackgroundColor: transparent;
 }
 
-/* ─── Remove default Authentik background image ─── */
+/* ─── Hide default Authentik background image ─── */
 .pf-c-background-image,
 .pf-v5-c-background-image {
   background-image: none !important;
   background-color: transparent !important;
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  z-index: 0 !important;
-  overflow: hidden !important;
-  pointer-events: none !important;
 }
 
-.pf-c-background-image::before,
-.pf-v5-c-background-image::before,
-.pf-c-background-image::after,
-.pf-v5-c-background-image::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-/* ─── Sky (day / night cycle) ─── */
-.pf-c-background-image::before,
-.pf-v5-c-background-image::before {
-  z-index: -3;
-  background: linear-gradient(
-    180deg,
-    var(--sylva-sky-top) 0%,
-    var(--sylva-sky-mid) 45%,
-    var(--sylva-sky-bottom) 100%
-  );
-  animation: sylvaSkyCycle var(--sylva-cycle) linear infinite;
-}
-
-@keyframes sylvaSkyCycle {
-  /* Night */
-  0%,
-  100% {
-    --sylva-sky-top: #0a0e1a;
-    --sylva-sky-mid: #1a2040;
-    --sylva-sky-bottom: #2a3050;
-    --sylva-glow-opacity: 0.12;
-  }
-  /* Dawn */
-  8% {
-    --sylva-sky-top: #4a6a8a;
-    --sylva-sky-mid: #c48a6a;
-    --sylva-sky-bottom: #f0c8a0;
-    --sylva-glow-opacity: 0.35;
-  }
-  /* Day */
-  22%,
-  48% {
-    --sylva-sky-top: #5a9ec8;
-    --sylva-sky-mid: #87ceeb;
-    --sylva-sky-bottom: #b8dce8;
-    --sylva-glow-opacity: 0.28;
-  }
-  /* Dusk */
-  62% {
-    --sylva-sky-top: #2a2848;
-    --sylva-sky-mid: #8a4a68;
-    --sylva-sky-bottom: #d87848;
-    --sylva-glow-opacity: 0.32;
-  }
-  /* Back to night */
-  78% {
-    --sylva-sky-top: #0a0e1a;
-    --sylva-sky-mid: #1a2040;
-    --sylva-sky-bottom: #2a3050;
-    --sylva-glow-opacity: 0.12;
-  }
-}
-
-/* Horizon glow */
-.pf-c-background-image::after,
-.pf-v5-c-background-image::after {
-  z-index: -2;
-  background: radial-gradient(
-    ellipse 120% 60% at 50% 85%,
-    rgba(255, 200, 150, var(--sylva-glow-opacity)) 0%,
-    transparent 70%
-  );
-  animation: sylvaSkyCycle var(--sylva-cycle) linear infinite;
-}
-
-/* ─── Landscape (mountains + ground) ─── */
-body::before {
-  content: "";
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 65vh;
-  z-index: -1;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 520' preserveAspectRatio='xMidYMax slice'%3E%3Cpath fill='%233d5c32' fill-opacity='0.45' d='M-200,380 L200,280 L600,220 L1000,250 L1400,300 L1400,520 L-200,520'/%3E%3Cpath fill='%233d5c32' fill-opacity='0.65' d='M-200,420 L300,350 L700,310 L1200,340 L1400,360 L1400,520 L-200,520'/%3E%3Crect fill='%233d5c32' x='-200' y='420' width='1600' height='120'/%3E%3Cellipse fill='%234a9e5c' fill-opacity='0.22' cx='600' cy='470' rx='700' ry='40'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: cover;
-}
-
-/* Vignette over scene */
+/* ─── Full-page scene (fixed to viewport) ─── */
+html::before,
+html::after,
+body::before,
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 0;
   pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.12) 50%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
 }
 
-/* ─── Particles (CSS drift) ─── */
-ak-flow-executor {
+/* Night base */
+html::before {
+  z-index: -5;
+  background: linear-gradient(180deg, #0a0e1a 0%, #1a2040 45%, #2a3050 100%);
+}
+
+/* Day */
+html::after {
+  z-index: -4;
+  background: linear-gradient(180deg, #5a9ec8 0%, #87ceeb 45%, #b8dce8 100%);
+  animation: sylvaDayFade var(--sylva-cycle) linear infinite;
+}
+
+/* Dawn / dusk warm tint */
+body::before {
+  z-index: -3;
+  background: linear-gradient(180deg, #4a6a8a 0%, #c48a6a 45%, #f0c8a0 100%);
+  animation: sylvaDawnDuskFade var(--sylva-cycle) linear infinite;
+}
+
+/* Landscape + bottom vignette */
+body::after {
+  z-index: -2;
+  background:
+    linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, 0.35) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 520' preserveAspectRatio='xMidYMax slice'%3E%3Cpath fill='%233d5c32' fill-opacity='0.5' d='M-200,380 L200,280 L600,220 L1000,250 L1400,300 L1400,520 L-200,520'/%3E%3Cpath fill='%233d5c32' fill-opacity='0.7' d='M-200,420 L300,350 L700,310 L1200,340 L1400,360 L1400,520 L-200,520'/%3E%3Crect fill='%233d5c32' x='-200' y='420' width='1600' height='120'/%3E%3Cellipse fill='%234a9e5c' fill-opacity='0.2' cx='600' cy='470' rx='700' ry='40'/%3E%3C/svg%3E")
+      center bottom / cover no-repeat;
+}
+
+@keyframes sylvaDayFade {
+  0%,
+  18%,
+  72%,
+  100% {
+    opacity: 0;
+  }
+  28%,
+  58% {
+    opacity: 1;
+  }
+}
+
+@keyframes sylvaDawnDuskFade {
+  0%,
+  10%,
+  65%,
+  100% {
+    opacity: 0;
+  }
+  14%,
+  20% {
+    opacity: 0.85;
+  }
+  60%,
+  66% {
+    opacity: 0.9;
+  }
+}
+
+/* ─── Particles (on document root — works outside shadow DOM) ─── */
+html {
+  overflow-x: hidden;
+  background-color: #0a0e1a;
+}
+
+/* Drifting motes */
+body {
   position: relative;
 }
 
-ak-flow-executor::before,
-ak-flow-executor::after {
+.pf-c-page::before,
+.pf-c-page__main-section::before {
   content: "";
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
+  box-shadow:
+    6vw 10vh 0 1px rgba(168, 232, 120, 0.55),
+    16vw 22vh 0 1px rgba(168, 232, 120, 0.4),
+    28vw 8vh 0 1px rgba(200, 240, 160, 0.45),
+    42vw 18vh 0 1px rgba(168, 232, 120, 0.35),
+    58vw 12vh 0 1px rgba(200, 240, 160, 0.5),
+    74vw 28vh 0 1px rgba(168, 232, 120, 0.4),
+    88vw 14vh 0 1px rgba(200, 240, 160, 0.35),
+    22vw 40vh 0 1px rgba(168, 232, 120, 0.3),
+    52vw 36vh 0 1px rgba(200, 240, 160, 0.4);
+  animation: sylvaDrift 20s ease-in-out infinite alternate;
 }
 
-/* Fireflies / pollen (visible day & dusk) */
-ak-flow-executor::before {
+.pf-c-page::after,
+.pf-c-page__main-section::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 3px;
   height: 3px;
   border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
   box-shadow:
-    8vw 12vh 0 0 rgba(168, 232, 120, 0.55),
-    18vw 28vh 0 0 rgba(168, 232, 120, 0.4),
-    32vw 8vh 0 0 rgba(200, 240, 160, 0.45),
-    48vw 22vh 0 0 rgba(168, 232, 120, 0.35),
-    62vw 15vh 0 0 rgba(200, 240, 160, 0.5),
-    78vw 30vh 0 0 rgba(168, 232, 120, 0.4),
-    88vw 10vh 0 0 rgba(200, 240, 160, 0.35),
-    25vw 45vh 0 0 rgba(168, 232, 120, 0.3),
-    55vw 38vh 0 0 rgba(200, 240, 160, 0.4),
-    72vw 52vh 0 0 rgba(168, 232, 120, 0.35);
-  animation: sylvaParticlesDrift 18s ease-in-out infinite alternate;
-  opacity: 0.85;
+    10vw 6vh 0 0 rgba(255, 255, 255, 0.65),
+    24vw 16vh 0 0 rgba(255, 255, 255, 0.45),
+    36vw 5vh 0 0 rgba(255, 255, 255, 0.55),
+    50vw 20vh 0 0 rgba(255, 255, 255, 0.4),
+    66vw 9vh 0 0 rgba(255, 255, 255, 0.6),
+    80vw 24vh 0 0 rgba(255, 255, 255, 0.45),
+    14vw 30vh 0 0 rgba(232, 168, 56, 0.4),
+    44vw 44vh 0 0 rgba(232, 168, 56, 0.35),
+    70vw 48vh 0 0 rgba(255, 255, 255, 0.35);
+  animation: sylvaFall 16s linear infinite;
 }
 
-/* Snow / stars (stronger at night via opacity pulse) */
-ak-flow-executor::after {
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  background: transparent;
-  box-shadow:
-    5vw 6vh 0 0 rgba(255, 255, 255, 0.7),
-    12vw 18vh 0 0 rgba(255, 255, 255, 0.5),
-    22vw 4vh 0 0 rgba(255, 255, 255, 0.6),
-    35vw 14vh 0 0 rgba(255, 255, 255, 0.45),
-    44vw 24vh 0 0 rgba(255, 255, 255, 0.55),
-    58vw 8vh 0 0 rgba(255, 255, 255, 0.65),
-    68vw 20vh 0 0 rgba(255, 255, 255, 0.5),
-    82vw 12vh 0 0 rgba(255, 255, 255, 0.6),
-    92vw 26vh 0 0 rgba(255, 255, 255, 0.45),
-    15vw 32vh 0 0 rgba(255, 255, 255, 0.4),
-    28vw 42vh 0 0 rgba(255, 255, 255, 0.35),
-    50vw 35vh 0 0 rgba(255, 255, 255, 0.5),
-    75vw 44vh 0 0 rgba(255, 255, 255, 0.4),
-    6vw 52vh 0 0 rgba(232, 168, 56, 0.45),
-    38vw 48vh 0 0 rgba(232, 168, 56, 0.35),
-    64vw 55vh 0 0 rgba(232, 168, 56, 0.4);
-  animation:
-    sylvaParticlesFall 14s linear infinite,
-    sylvaNightParticles 1200s linear infinite;
-}
-
-@keyframes sylvaParticlesDrift {
+@keyframes sylvaDrift {
   from {
     transform: translate(0, 0);
   }
   to {
-    transform: translate(12px, -18px);
+    transform: translate(14px, -20px);
   }
 }
 
-@keyframes sylvaParticlesFall {
+@keyframes sylvaFall {
   from {
-    transform: translateY(-8px);
+    transform: translateY(-10px);
   }
   to {
-    transform: translateY(24px);
+    transform: translateY(30px);
   }
 }
 
-@keyframes sylvaNightParticles {
-  0%,
-  72%,
-  100% {
-    opacity: 0.25;
-  }
-  8%,
-  58% {
-    opacity: 0.15;
-  }
-  22%,
-  48% {
-    opacity: 0.08;
-  }
-}
-
-/* Keep login UI above the scene */
-.pf-c-login,
-.pf-v5-c-login,
-ak-flow-executor::part(main),
-.pf-c-login__main,
-.pf-v5-c-login__main {
-  position: relative;
-  z-index: 2;
-}
-
-/* ─── Login card ─── */
+/* ─── Login panel: no extra box ─── */
 .pf-c-login__main,
 .pf-v5-c-login__main,
-ak-flow-executor::part(main) {
-  font-family: var(--sylva-font-body);
-  color: var(--sylva-text);
-  background-color: var(--sylva-card-bg) !important;
-  border: 1px solid var(--sylva-card-border);
-  border-radius: 1rem !important;
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.18),
-    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
-}
-
 .pf-c-login__footer,
-.pf-v5-c-login__footer {
-  background-color: var(--sylva-card-bg) !important;
-  border-radius: 0 0 1rem 1rem;
+.pf-v5-c-login__footer,
+ak-flow-executor::part(main) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
-/* Title — Brand title: SylvaNova */
-.pf-c-login__main-header h1,
-.pf-v5-c-login__main-header h1,
-.pf-c-title,
-.pf-v5-c-title,
-ak-flow-executor::part(header) {
-  font-family: var(--sylva-font-display) !important;
-  font-size: clamp(2rem, 5vw, 2.75rem) !important;
-  font-weight: 700 !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.02em;
-  text-align: center;
-  background: linear-gradient(
-    90deg,
-    var(--sylva-text) 0%,
-    var(--sylva-text) 52%,
-    var(--sylva-accent) 52%,
-    var(--sylva-accent) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-}
-
-.pf-c-login__main-body,
-.pf-v5-c-login__main-body,
-.pf-c-login__main-body p,
-.pf-v5-c-login__main-body p {
-  font-family: var(--sylva-font-body);
-  color: var(--sylva-text-muted);
-}
-
-.pf-c-form__label-text,
-.pf-v5-c-form__label-text,
-label {
-  font-family: var(--sylva-font-body);
-  color: var(--sylva-text);
-  font-weight: 500;
-}
-
-.pf-c-form-control,
-.pf-v5-c-form-control,
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  font-family: var(--sylva-font-body);
-  border-color: var(--sylva-input-border) !important;
-  border-radius: 0.5rem !important;
-}
-
-.pf-c-form-control:focus,
-.pf-v5-c-form-control:focus,
-input:focus {
-  border-color: var(--sylva-accent) !important;
-  box-shadow: 0 0 0 2px var(--sylva-accent-glow) !important;
-}
-
-.pf-c-button.pf-m-primary,
-.pf-v5-c-button.pf-m-primary,
-button[type="submit"].pf-c-button,
-button[type="submit"].pf-v5-c-button {
-  font-family: var(--sylva-font-body);
-  font-weight: 600;
-  background-color: var(--sylva-accent) !important;
-  border-color: var(--sylva-accent) !important;
-  border-radius: 0.5rem !important;
-}
-
-.pf-c-button.pf-m-primary:hover,
-.pf-v5-c-button.pf-m-primary:hover {
-  background-color: var(--sylva-accent-hover) !important;
-  border-color: var(--sylva-accent-hover) !important;
-}
-
-.pf-c-login__main a,
-.pf-v5-c-login__main a,
-.pf-c-login__main-body a {
-  color: var(--sylva-accent);
-}
-
-.pf-c-login__main a:hover,
-.pf-v5-c-login__main a:hover {
-  color: var(--sylva-accent-hover);
+.pf-c-card,
+.pf-v5-c-card {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-c-background-image::before,
-  .pf-v5-c-background-image::before,
-  .pf-c-background-image::after,
-  .pf-v5-c-background-image::after,
-  ak-flow-executor::before,
-  ak-flow-executor::after {
+  html::after,
+  body::before,
+  .pf-c-page::before,
+  .pf-c-page::after,
+  .pf-c-page__main-section::before,
+  .pf-c-page__main-section::after {
     animation: none !important;
   }
 
-  :root {
-    --sylva-sky-top: #2a3858;
-    --sylva-sky-mid: #3a5568;
-    --sylva-sky-bottom: #3d5c32;
+  html::after,
+  body::before {
+    opacity: 0 !important;
   }
 }
