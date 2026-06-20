@@ -8,32 +8,39 @@
  *   - No custom title / text styling
  *   - Login sidebar: no extra border or shadow (keeps default white panel)
  *
- * Background targets Authentik's .pf-c-background-image layer only.
- * Works with stacked and sidebar flow layouts.
+ * Authentik paints flow backgrounds on body::before (--ak-global--background-image).
+ * .pf-c-background-image is not used on flow pages — do not target it alone.
  */
 
 :root {
   --sylva-cycle: 1200s;
 
-  /* Fallback sky + landscape via Authentik's background variable */
-  --ak-flow-background: linear-gradient(
+  --ak-global--background-color: #1a2040 !important;
+  --ak-global--background-image: linear-gradient(
       180deg,
-      #1a2040 0%,
-      #2a3050 55%,
-      #3d5c32 100%
-    )
-    !important;
+      #0a0e1a 0%,
+      #1a2040 45%,
+      #2a3050 100%
+    ) !important;
 
-  /* Keep login panel visible — do NOT use transparent */
   --pf-c-login__main--BackgroundColor: #ffffff;
   --pf-v5-c-login__main--BackgroundColor: #ffffff;
   --pf-c-login__main-footer-band--BackgroundColor: #ffffff;
   --pf-v5-c-login__main-footer-band--BackgroundColor: #ffffff;
 }
 
-/* ─── Flow background (never blank — solid fallback color first) ─── */
-.pf-c-background-image,
-.pf-v5-c-background-image {
+body {
+  background-color: #1a2040 !important;
+}
+
+/* Base sky + landscape (beats inline --ak-global--background-image from JS) */
+body::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -3 !important;
+  pointer-events: none !important;
+
   background-color: #1a2040 !important;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 520' preserveAspectRatio='xMidYMax slice'%3E%3Cpath fill='%233d5c32' fill-opacity='0.55' d='M-200,380 L200,280 L600,220 L1000,250 L1400,300 L1400,520 L-200,520'/%3E%3Cpath fill='%233d5c32' fill-opacity='0.75' d='M-200,420 L300,350 L700,310 L1200,340 L1400,360 L1400,520 L-200,520'/%3E%3Crect fill='%233d5c32' x='-200' y='420' width='1600' height='120'/%3E%3Cellipse fill='%234a9e5c' fill-opacity='0.22' cx='600' cy='470' rx='700' ry='40'/%3E%3C/svg%3E"),
@@ -41,32 +48,41 @@
   background-size: cover, cover !important;
   background-position: center bottom, center !important;
   background-repeat: no-repeat, no-repeat !important;
+  background-attachment: scroll, scroll !important;
+
   filter: brightness(0.9);
   animation: sylvaSkyCycle var(--sylva-cycle) linear infinite;
 }
 
-/* Day sky layer */
-.pf-c-background-image::before,
-.pf-v5-c-background-image::before {
+/* Day sky overlay */
+body::after {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: -2;
   pointer-events: none;
   background: linear-gradient(180deg, #5a9ec8 0%, #87ceeb 45%, #b8dce8 100%);
   opacity: 0;
   animation: sylvaDayLayer var(--sylva-cycle) linear infinite;
 }
 
-/* Dawn / dusk tint */
-.pf-c-background-image::after,
-.pf-v5-c-background-image::after {
+/* Dawn / dusk overlay */
+html::after {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
   background: linear-gradient(180deg, #4a6a8a 0%, #c48a6a 45%, #f0c8a0 100%);
   opacity: 0;
   animation: sylvaWarmLayer var(--sylva-cycle) linear infinite;
+}
+
+/* Sidebar layout: keep the wide content column clear so body background shows */
+@media (min-width: 70rem) and (min-height: 17.5rem) {
+  .ak-c-login__content {
+    background: transparent !important;
+  }
 }
 
 @keyframes sylvaSkyCycle {
@@ -121,7 +137,7 @@
   }
 }
 
-/* ─── Login panel: no extra bounding box ─── */
+/* Login panel: no extra bounding box */
 .pf-c-login__main,
 .pf-v5-c-login__main,
 .pf-c-login__footer,
@@ -132,20 +148,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-c-background-image,
-  .pf-v5-c-background-image,
-  .pf-c-background-image::before,
-  .pf-v5-c-background-image::before,
-  .pf-c-background-image::after,
-  .pf-v5-c-background-image::after {
+  body::before,
+  body::after,
+  html::after {
     animation: none !important;
     filter: none !important;
   }
 
-  .pf-c-background-image::before,
-  .pf-v5-c-background-image::before,
-  .pf-c-background-image::after,
-  .pf-v5-c-background-image::after {
+  body::after,
+  html::after {
     opacity: 0 !important;
   }
 }
