@@ -1,210 +1,151 @@
 /*
- * SylvaNova — Authentik theme (background scene + minimal login panel)
+ * SylvaNova — Authentik theme
  *
- * Paste into: Admin → System → Brands → [your brand] → Custom CSS
+ * Paste into: Admin → System → Brands → Custom CSS
  *
  * Setup:
  *   - Clear "Default flow background" in Brand settings (leave empty)
- *   - No custom title styling — uses your Brand title as-is
+ *   - No custom title / text styling
+ *   - Login sidebar: no extra border or shadow (keeps default white panel)
  *
- * Sky cycles night → dawn → day → dusk (~20 min). CSS-only (not wall-clock time).
+ * Background targets Authentik's .pf-c-background-image layer only.
+ * Works with stacked and sidebar flow layouts.
  */
 
 :root {
   --sylva-cycle: 1200s;
-  --ak-flow-background: none !important;
-  --pf-c-background-image--BackgroundColor: transparent;
-  --pf-v5-c-background-image--BackgroundColor: transparent;
-  --pf-c-login__main--BackgroundColor: transparent;
-  --pf-v5-c-login__main--BackgroundColor: transparent;
-  --pf-c-login__main-footer-band--BackgroundColor: transparent;
-  --pf-v5-c-login__main-footer-band--BackgroundColor: transparent;
+
+  /* Fallback sky + landscape via Authentik's background variable */
+  --ak-flow-background: linear-gradient(
+      180deg,
+      #1a2040 0%,
+      #2a3050 55%,
+      #3d5c32 100%
+    )
+    !important;
+
+  /* Keep login panel visible — do NOT use transparent */
+  --pf-c-login__main--BackgroundColor: #ffffff;
+  --pf-v5-c-login__main--BackgroundColor: #ffffff;
+  --pf-c-login__main-footer-band--BackgroundColor: #ffffff;
+  --pf-v5-c-login__main-footer-band--BackgroundColor: #ffffff;
 }
 
-/* ─── Hide default Authentik background image ─── */
+/* ─── Flow background (never blank — solid fallback color first) ─── */
 .pf-c-background-image,
 .pf-v5-c-background-image {
-  background-image: none !important;
-  background-color: transparent !important;
+  background-color: #1a2040 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 520' preserveAspectRatio='xMidYMax slice'%3E%3Cpath fill='%233d5c32' fill-opacity='0.55' d='M-200,380 L200,280 L600,220 L1000,250 L1400,300 L1400,520 L-200,520'/%3E%3Cpath fill='%233d5c32' fill-opacity='0.75' d='M-200,420 L300,350 L700,310 L1200,340 L1400,360 L1400,520 L-200,520'/%3E%3Crect fill='%233d5c32' x='-200' y='420' width='1600' height='120'/%3E%3Cellipse fill='%234a9e5c' fill-opacity='0.22' cx='600' cy='470' rx='700' ry='40'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #0a0e1a 0%, #1a2040 45%, #2a3050 100%) !important;
+  background-size: cover, cover !important;
+  background-position: center bottom, center !important;
+  background-repeat: no-repeat, no-repeat !important;
+  filter: brightness(0.9);
+  animation: sylvaSkyCycle var(--sylva-cycle) linear infinite;
 }
 
-/* ─── Full-page scene (fixed to viewport) ─── */
-html::before,
-html::after,
-body::before,
-body::after {
+/* Day sky layer */
+.pf-c-background-image::before,
+.pf-v5-c-background-image::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
-}
-
-/* Night base */
-html::before {
-  z-index: -5;
-  background: linear-gradient(180deg, #0a0e1a 0%, #1a2040 45%, #2a3050 100%);
-}
-
-/* Day */
-html::after {
-  z-index: -4;
   background: linear-gradient(180deg, #5a9ec8 0%, #87ceeb 45%, #b8dce8 100%);
-  animation: sylvaDayFade var(--sylva-cycle) linear infinite;
+  opacity: 0;
+  animation: sylvaDayLayer var(--sylva-cycle) linear infinite;
 }
 
-/* Dawn / dusk warm tint */
-body::before {
-  z-index: -3;
+/* Dawn / dusk tint */
+.pf-c-background-image::after,
+.pf-v5-c-background-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   background: linear-gradient(180deg, #4a6a8a 0%, #c48a6a 45%, #f0c8a0 100%);
-  animation: sylvaDawnDuskFade var(--sylva-cycle) linear infinite;
+  opacity: 0;
+  animation: sylvaWarmLayer var(--sylva-cycle) linear infinite;
 }
 
-/* Landscape + bottom vignette */
-body::after {
-  z-index: -2;
-  background:
-    linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, 0.35) 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 520' preserveAspectRatio='xMidYMax slice'%3E%3Cpath fill='%233d5c32' fill-opacity='0.5' d='M-200,380 L200,280 L600,220 L1000,250 L1400,300 L1400,520 L-200,520'/%3E%3Cpath fill='%233d5c32' fill-opacity='0.7' d='M-200,420 L300,350 L700,310 L1200,340 L1400,360 L1400,520 L-200,520'/%3E%3Crect fill='%233d5c32' x='-200' y='420' width='1600' height='120'/%3E%3Cellipse fill='%234a9e5c' fill-opacity='0.2' cx='600' cy='470' rx='700' ry='40'/%3E%3C/svg%3E")
-      center bottom / cover no-repeat;
-}
-
-@keyframes sylvaDayFade {
+@keyframes sylvaSkyCycle {
   0%,
-  18%,
-  72%,
+  100% {
+    filter: brightness(0.85) saturate(0.95);
+  }
+  12%,
+  18% {
+    filter: brightness(1) saturate(1.05);
+  }
+  30%,
+  55% {
+    filter: brightness(1.12) saturate(1);
+  }
+  62%,
+  68% {
+    filter: brightness(0.95) saturate(1.15);
+  }
+  78% {
+    filter: brightness(0.85) saturate(0.95);
+  }
+}
+
+@keyframes sylvaDayLayer {
+  0%,
+  20%,
+  70%,
   100% {
     opacity: 0;
   }
-  28%,
+  30%,
   58% {
     opacity: 1;
   }
 }
 
-@keyframes sylvaDawnDuskFade {
+@keyframes sylvaWarmLayer {
   0%,
-  10%,
-  65%,
+  8%,
+  66%,
   100% {
     opacity: 0;
   }
-  14%,
-  20% {
-    opacity: 0.85;
+  12%,
+  18% {
+    opacity: 0.75;
   }
   60%,
   66% {
-    opacity: 0.9;
+    opacity: 0.8;
   }
 }
 
-/* ─── Particles (on document root — works outside shadow DOM) ─── */
-html {
-  overflow-x: hidden;
-  background-color: #0a0e1a;
-}
-
-/* Drifting motes */
-body {
-  position: relative;
-}
-
-.pf-c-page::before,
-.pf-c-page__main-section::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
-  box-shadow:
-    6vw 10vh 0 1px rgba(168, 232, 120, 0.55),
-    16vw 22vh 0 1px rgba(168, 232, 120, 0.4),
-    28vw 8vh 0 1px rgba(200, 240, 160, 0.45),
-    42vw 18vh 0 1px rgba(168, 232, 120, 0.35),
-    58vw 12vh 0 1px rgba(200, 240, 160, 0.5),
-    74vw 28vh 0 1px rgba(168, 232, 120, 0.4),
-    88vw 14vh 0 1px rgba(200, 240, 160, 0.35),
-    22vw 40vh 0 1px rgba(168, 232, 120, 0.3),
-    52vw 36vh 0 1px rgba(200, 240, 160, 0.4);
-  animation: sylvaDrift 20s ease-in-out infinite alternate;
-}
-
-.pf-c-page::after,
-.pf-c-page__main-section::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
-  box-shadow:
-    10vw 6vh 0 0 rgba(255, 255, 255, 0.65),
-    24vw 16vh 0 0 rgba(255, 255, 255, 0.45),
-    36vw 5vh 0 0 rgba(255, 255, 255, 0.55),
-    50vw 20vh 0 0 rgba(255, 255, 255, 0.4),
-    66vw 9vh 0 0 rgba(255, 255, 255, 0.6),
-    80vw 24vh 0 0 rgba(255, 255, 255, 0.45),
-    14vw 30vh 0 0 rgba(232, 168, 56, 0.4),
-    44vw 44vh 0 0 rgba(232, 168, 56, 0.35),
-    70vw 48vh 0 0 rgba(255, 255, 255, 0.35);
-  animation: sylvaFall 16s linear infinite;
-}
-
-@keyframes sylvaDrift {
-  from {
-    transform: translate(0, 0);
-  }
-  to {
-    transform: translate(14px, -20px);
-  }
-}
-
-@keyframes sylvaFall {
-  from {
-    transform: translateY(-10px);
-  }
-  to {
-    transform: translateY(30px);
-  }
-}
-
-/* ─── Login panel: no extra box ─── */
+/* ─── Login panel: no extra bounding box ─── */
 .pf-c-login__main,
 .pf-v5-c-login__main,
 .pf-c-login__footer,
-.pf-v5-c-login__footer,
-ak-flow-executor::part(main) {
-  background: transparent !important;
+.pf-v5-c-login__footer {
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
 }
 
-.pf-c-card,
-.pf-v5-c-card {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  html::after,
-  body::before,
-  .pf-c-page::before,
-  .pf-c-page::after,
-  .pf-c-page__main-section::before,
-  .pf-c-page__main-section::after {
+  .pf-c-background-image,
+  .pf-v5-c-background-image,
+  .pf-c-background-image::before,
+  .pf-v5-c-background-image::before,
+  .pf-c-background-image::after,
+  .pf-v5-c-background-image::after {
     animation: none !important;
+    filter: none !important;
   }
 
-  html::after,
-  body::before {
+  .pf-c-background-image::before,
+  .pf-v5-c-background-image::before,
+  .pf-c-background-image::after,
+  .pf-v5-c-background-image::after {
     opacity: 0 !important;
   }
 }
