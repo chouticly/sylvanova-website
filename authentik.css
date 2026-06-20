@@ -1,0 +1,152 @@
+/*
+ * SylvaNova — Authentik login card CSS
+ *
+ * Paste into: Admin → System → Brands → [your brand] → Custom CSS
+ *
+ * Does NOT style the flow background image — only the login card and title.
+ *
+ * Brand settings:
+ *   - Title: SylvaNova
+ *   - Set your own flow background image separately if desired
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap");
+
+:root {
+  --sylva-text: #1a2e1a;
+  --sylva-text-muted: #4a5e4a;
+  --sylva-accent: #3d7a45;
+  --sylva-accent-hover: #2f6236;
+  --sylva-accent-glow: rgba(61, 122, 69, 0.35);
+  --sylva-card-bg: #f8faf8;
+  --sylva-card-border: rgba(61, 122, 69, 0.18);
+  --sylva-input-border: rgba(61, 122, 69, 0.25);
+  --sylva-font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sylva-font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+
+  /* PatternFly v4 + v5 login card */
+  --pf-c-login__main--BackgroundColor: var(--sylva-card-bg);
+  --pf-v5-c-login__main--BackgroundColor: var(--sylva-card-bg);
+  --pf-c-login__main-footer-band--BackgroundColor: var(--sylva-card-bg);
+  --pf-v5-c-login__main-footer-band--BackgroundColor: var(--sylva-card-bg);
+  --pf-c-card--BackgroundColor: var(--sylva-card-bg);
+  --pf-v5-c-card--BackgroundColor: var(--sylva-card-bg);
+}
+
+/* Login card shell */
+.pf-c-login__main,
+.pf-v5-c-login__main,
+ak-flow-executor::part(main) {
+  font-family: var(--sylva-font-body);
+  color: var(--sylva-text);
+  background-color: var(--sylva-card-bg) !important;
+  border: 1px solid var(--sylva-card-border);
+  border-radius: 1rem !important;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+}
+
+.pf-c-login__footer,
+.pf-v5-c-login__footer {
+  background-color: var(--sylva-card-bg) !important;
+  border-radius: 0 0 1rem 1rem;
+}
+
+/* Title — set Brand title to "SylvaNova" */
+.pf-c-login__main-header h1,
+.pf-v5-c-login__main-header h1,
+.pf-c-title,
+.pf-v5-c-title,
+ak-flow-executor::part(header) {
+  font-family: var(--sylva-font-display) !important;
+  font-size: clamp(2rem, 5vw, 2.75rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em;
+  text-align: center;
+  background: linear-gradient(
+    90deg,
+    var(--sylva-text) 0%,
+    var(--sylva-text) 52%,
+    var(--sylva-accent) 52%,
+    var(--sylva-accent) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+/* Subtitle / flow description */
+.pf-c-login__main-body,
+.pf-v5-c-login__main-body,
+.pf-c-login__main-body p,
+.pf-v5-c-login__main-body p {
+  font-family: var(--sylva-font-body);
+  color: var(--sylva-text-muted);
+}
+
+/* Form labels */
+.pf-c-form__label-text,
+.pf-v5-c-form__label-text,
+label {
+  font-family: var(--sylva-font-body);
+  color: var(--sylva-text);
+  font-weight: 500;
+}
+
+/* Inputs */
+.pf-c-form-control,
+.pf-v5-c-form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  font-family: var(--sylva-font-body);
+  border-color: var(--sylva-input-border) !important;
+  border-radius: 0.5rem !important;
+}
+
+.pf-c-form-control:focus,
+.pf-v5-c-form-control:focus,
+input:focus {
+  border-color: var(--sylva-accent) !important;
+  box-shadow: 0 0 0 2px var(--sylva-accent-glow) !important;
+}
+
+/* Primary buttons */
+.pf-c-button.pf-m-primary,
+.pf-v5-c-button.pf-m-primary,
+button[type="submit"].pf-c-button,
+button[type="submit"].pf-v5-c-button {
+  font-family: var(--sylva-font-body);
+  font-weight: 600;
+  background-color: var(--sylva-accent) !important;
+  border-color: var(--sylva-accent) !important;
+  border-radius: 0.5rem !important;
+}
+
+.pf-c-button.pf-m-primary:hover,
+.pf-v5-c-button.pf-m-primary:hover {
+  background-color: var(--sylva-accent-hover) !important;
+  border-color: var(--sylva-accent-hover) !important;
+}
+
+/* Links inside the card */
+.pf-c-login__main a,
+.pf-v5-c-login__main a,
+.pf-c-login__main-body a {
+  color: var(--sylva-accent);
+}
+
+.pf-c-login__main a:hover,
+.pf-v5-c-login__main a:hover {
+  color: var(--sylva-accent-hover);
+}
+
+/* Hide default Authentik logo in card if you use text title only */
+.pf-c-brand,
+.pf-v5-c-brand,
+ak-flow-executor::part(brand) {
+  /* Uncomment to hide logo and rely on title text only */
+  /* display: none !important; */
+}
