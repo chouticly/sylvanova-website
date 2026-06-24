@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import {
+  containsBlockedMentions,
   isShoutboxConfigured,
   postShoutboxMessage,
   sanitizeMessageContent,
@@ -32,6 +33,13 @@ export async function POST(request: Request) {
   const content = sanitizeMessageContent(body.content ?? "");
   if (!content) {
     return NextResponse.json({ error: "Message cannot be empty" }, { status: 400 });
+  }
+
+  if (containsBlockedMentions(content)) {
+    return NextResponse.json(
+      { error: "Messages cannot mention @everyone, @here, or roles" },
+      { status: 400 }
+    );
   }
 
   const now = Date.now();

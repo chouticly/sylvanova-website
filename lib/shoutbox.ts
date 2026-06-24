@@ -71,8 +71,18 @@ export function getShoutboxUsername(): string {
   return process.env.SHOUTBOX_USERNAME || "cooldude67";
 }
 
+const BLOCKED_MENTION_PATTERNS = [
+  /@everyone\b/i,
+  /@here\b/i,
+  /<@&\d+>/,
+] as const;
+
 export function sanitizeMessageContent(content: string): string {
   return content.replace(/\0/g, "").trim().slice(0, MAX_MESSAGE_LENGTH);
+}
+
+export function containsBlockedMentions(content: string): boolean {
+  return BLOCKED_MENTION_PATTERNS.some((pattern) => pattern.test(content));
 }
 
 function getAuthorAvatar(author: DiscordMessage["author"]): string | null {
@@ -141,7 +151,11 @@ export async function postShoutboxMessage(content: string): Promise<void> {
   const response = await fetch(`${webhookUrl}?wait=true`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, content: sanitized }),
+    body: JSON.stringify({
+      username,
+      content: sanitized,
+      allowed_mentions: { parse: ["users"] },
+    }),
   });
 
   if (!response.ok) {
