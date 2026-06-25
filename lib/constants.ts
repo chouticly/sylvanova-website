@@ -1,5 +1,12 @@
 export const SITE_NAME = "SylvaNova";
 
+export const COMPANY_NAME = "SylvaNova, LLC";
+
+export const COMPANY_TAGLINE = "Gaming community";
+
+/** Set to true once SylvaNova, LLC is registered. */
+export const SHOW_SITE_FOOTER = false;
+
 export const TAGLINE = "A forest is growing. Something new takes root.";
 
 export const DISCORD_INVITE_URL = "https://discord.gg/sylvanova";

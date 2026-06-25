@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { AnnouncementNotifications } from "@/components/AnnouncementNotifications";
 import { Hero } from "@/components/Hero";
 import { ShoutboxTrigger } from "@/components/ShoutboxTrigger";
+import { SiteFooter } from "@/components/SiteFooter";
 import { LandscapeBackground } from "@/components/LandscapeBackground";
 import { ParticleField } from "@/components/ParticleField";
 import { SkyBackground } from "@/components/SkyBackground";
 import { useMounted } from "@/hooks/useMounted";
 import { useSeasonCycle } from "@/hooks/useSeasonCycle";
 import { useTimeOfDay } from "@/hooks/useTimeOfDay";
+import { SHOW_SITE_FOOTER } from "@/lib/constants";
 import { getThemePalette } from "@/lib/colors";
 
 export function LandingScene() {
@@ -51,6 +53,7 @@ export function LandingScene() {
       <Hero />
       <AnnouncementNotifications />
       <ShoutboxTrigger reducedMotion={reducedMotion} />
+      {SHOW_SITE_FOOTER && <SiteFooter />}
     </div>
   );
 }

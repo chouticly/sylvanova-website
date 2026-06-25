@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import Script from "next/script";
+import { cookies } from "next/headers";
+import {
+  getWelcomeTitle,
+  getWelcomeTitleBootstrapScript,
+  VISIT_MARKER,
+} from "@/lib/welcome-title";
 import "./globals.css";
 
 const displayFont = Cormorant_Garamond({
@@ -14,16 +21,24 @@ const bodyFont = DM_Sans({
   variable: "--font-body",
 });
 
-export const metadata: Metadata = {
-  title: "SylvaNova — Welcome Home!",
-  description:
-    "SylvaNova is a gaming community grove taking root. Something new is growing — check back soon.",
-  openGraph: {
-    title: "SylvaNova — Welcome Home!",
-    description: "A gaming community grove taking root.",
-    type: "website",
-  },
-};
+const SITE_DESCRIPTION =
+  "SylvaNova is a gaming community grove taking root. Something new is growing — check back soon.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const hasVisited = cookieStore.get(VISIT_MARKER)?.value === "1";
+  const title = getWelcomeTitle(hasVisited);
+
+  return {
+    title,
+    description: SITE_DESCRIPTION,
+    openGraph: {
+      title,
+      description: "A gaming community grove taking root.",
+      type: "website",
+    },
+  };
+}
 
 export default function RootLayout({
   children,
@@ -33,6 +48,13 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark">
       <body className={`${displayFont.variable} ${bodyFont.variable}`}>
+        <Script
+          id="welcome-title-bootstrap"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: getWelcomeTitleBootstrapScript(),
+          }}
+        />
         {children}
       </body>
     </html>

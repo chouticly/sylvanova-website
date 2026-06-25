@@ -1,19 +1,29 @@
 "use client";
 
-import { useEffect } from "react";
-import { SITE_NAME } from "@/lib/constants";
+import { useLayoutEffect } from "react";
+import { getWelcomeTitle, VISIT_MARKER } from "@/lib/welcome-title";
 
-const VISIT_STORAGE_KEY = "sylvanova-has-visited";
+function hasVisitedBefore(): boolean {
+  return (
+    localStorage.getItem(VISIT_MARKER) === "1" ||
+    document.cookie.includes(`${VISIT_MARKER}=1`)
+  );
+}
+
+function markVisited(): void {
+  localStorage.setItem(VISIT_MARKER, "1");
+  document.cookie = `${VISIT_MARKER}=1; path=/; max-age=31536000; SameSite=Lax`;
+}
 
 export function useWelcomeTitle() {
-  useEffect(() => {
-    const hasVisited = localStorage.getItem(VISIT_STORAGE_KEY) === "1";
-    document.title = hasVisited
-      ? `${SITE_NAME} — Welcome Back!`
-      : `${SITE_NAME} — Welcome Home!`;
+  useLayoutEffect(() => {
+    const hasVisited = hasVisitedBefore();
+    document.title = getWelcomeTitle(hasVisited);
 
     if (!hasVisited) {
-      localStorage.setItem(VISIT_STORAGE_KEY, "1");
+      markVisited();
+    } else if (localStorage.getItem(VISIT_MARKER) !== "1") {
+      localStorage.setItem(VISIT_MARKER, "1");
     }
   }, []);
 }
