@@ -590,7 +590,333 @@ body {
   font-size: 0.875rem;
 }
 
+.announcement-notifications {
+  position: absolute;
+  z-index: 10;
+  left: 1rem;
+  bottom: 1rem;
+  width: min(22rem, calc(100vw - 2rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: auto;
+}
+
+.announcement-notifications--collapsed {
+  width: auto;
+}
+
+.announcement-collapse-btn,
+.announcement-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.announcement-collapse-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
+  margin-left: auto;
+}
+
+.announcement-collapse-btn:hover {
+  color: var(--color-text);
+  border-color: var(--color-accent);
+  background: rgba(106, 184, 114, 0.12);
+}
+
+.announcement-expand-btn {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--color-surface);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.announcement-unread-badge {
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.125rem;
+  text-align: center;
+  border: 2px solid rgba(10, 16, 14, 0.95);
+  pointer-events: none;
+}
+
+.announcement-expand-btn:hover {
+  color: var(--color-text);
+  border-color: var(--color-accent);
+}
+
+.announcement-card {
+  padding: 0.875rem 1rem;
+  border-radius: 0.875rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  animation: announcement-slide-in 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  max-height: min(70dvh, calc(100dvh - 7rem));
+  overflow: hidden;
+}
+
+.announcement-card--static {
+  animation: none;
+}
+
+@keyframes announcement-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.announcement-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.announcement-avatar {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  object-fit: cover;
+}
+
+.announcement-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.announcement-meta-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.announcement-author {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.2;
+}
+
+.announcement-badge {
+  font-size: 0.625rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.25rem;
+  background: rgba(248, 113, 113, 0.2);
+  color: #fca5a5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.announcement-time {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.announcement-body {
+  margin-top: 0.625rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.announcement-content {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.announcement-mention {
+  display: inline;
+  padding: 0 0.15rem;
+  border-radius: 0.2rem;
+  background: rgba(88, 101, 242, 0.35);
+  color: #dee0fc;
+  font-weight: 500;
+}
+
+.announcement-role-mention {
+  display: inline;
+  padding: 0 0.15rem;
+  border-radius: 0.2rem;
+  font-weight: 500;
+}
+
+.announcement-channel-mention {
+  display: inline;
+  padding: 0 0.1rem;
+  border-radius: 0.2rem;
+  color: #8ea1e1;
+  background: rgba(88, 101, 242, 0.2);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.announcement-channel-mention:hover {
+  color: #dee0fc;
+  background: rgba(88, 101, 242, 0.35);
+  text-decoration: underline;
+}
+
+.announcement-embed {
+  display: block;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid var(--color-accent);
+  text-decoration: none;
+  color: inherit;
+}
+
+.announcement-embed-title {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  margin-bottom: 0.25rem;
+}
+
+.announcement-embed-desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.announcement-embed-image {
+  margin-top: 0.5rem;
+  max-width: 100%;
+  border-radius: 0.375rem;
+  height: auto;
+}
+
+.announcement-footer {
+  margin-top: 0.625rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.announcement-discord-link {
+  font-size: 0.8125rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.announcement-discord-link:hover {
+  text-decoration: underline;
+}
+
+.announcement-card--paused {
+  border-color: var(--color-accent);
+}
+
+.announcement-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.announcement-nav-btn {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.announcement-nav-btn:hover {
+  border-color: var(--color-accent);
+  background: rgba(106, 184, 114, 0.12);
+}
+
+.announcement-nav-count {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  min-width: 3rem;
+  text-align: center;
+}
+
+.announcement-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.announcement-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--color-border);
+  opacity: 0.6;
+}
+
+.announcement-dot--active {
+  background: var(--color-accent);
+  opacity: 1;
+}
+
+@media (max-width: 35rem) {
+  .announcement-notifications {
+    left: 1rem;
+    right: 5rem;
+    width: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .announcement-card {
+    animation: none;
+  }
+
   .sky-star {
     animation: none;
   }

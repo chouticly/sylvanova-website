@@ -24,14 +24,12 @@ export function Hero() {
         {SHOW_DISCORD_LOGIN && <DiscordLogin />}
         <a
           href={DISCORD_INVITE_URL}
-          className="btn btn-secondary"
-          aria-disabled="true"
-          title="Discord server coming soon"
-          onClick={(e) => e.preventDefault()}
+          className="btn btn-primary"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <DiscordIcon />
           Join Discord
-          <span className="btn-badge">Soon</span>
         </a>
       </div>
     </main>

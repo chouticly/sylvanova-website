@@ -47,6 +47,9 @@ Required environment variables:
   DISCORD_CLIENT_ID       (optional until Discord login is enabled)
   DISCORD_CLIENT_SECRET   (optional until Discord login is enabled)
   DISCORD_REDIRECT_URI    e.g. https://yourdomain.com/api/auth/callback/discord
+  DISCORD_BOT_TOKEN       Bot token for announcement channel sync
+  DISCORD_GUILD_ID        Discord server ID
+  DISCORD_ANNOUNCEMENT_CHANNEL_ID  Announcement channel ID
   NEXT_PUBLIC_BASE_URL    e.g. https://yourdomain.com
 
 Default port: 3000 (override with PORT).

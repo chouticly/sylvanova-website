@@ -9,6 +9,7 @@ An under-construction landing page for the **SylvaNova** gaming community. Featu
 - Sky adapts to visitor's local time (dawn / day / dusk / night)
 - Light and dark theme toggle (defaults to system preference)
 - Discord OAuth sign-in scaffolding
+- Discord announcement channel sync with cycling notification cards
 - Responsive layout for mobile and desktop
 - Respects `prefers-reduced-motion`
 
@@ -38,6 +39,9 @@ An under-construction landing page for the **SylvaNova** gaming community. Featu
    | `DISCORD_CLIENT_ID` | Discord app Client ID |
    | `DISCORD_CLIENT_SECRET` | Discord app Client Secret |
    | `DISCORD_REDIRECT_URI` | OAuth callback URL |
+   | `DISCORD_BOT_TOKEN` | Bot token for reading announcement channel |
+   | `DISCORD_GUILD_ID` | SylvaNova Discord server ID |
+   | `DISCORD_ANNOUNCEMENT_CHANNEL_ID` | Announcement channel ID to sync |
    | `SESSION_SECRET` | Random 32+ character string for session encryption |
    | `NEXT_PUBLIC_BASE_URL` | Your site URL (e.g. `https://sylvanova.example.com`) |
 
@@ -49,7 +53,18 @@ An under-construction landing page for the **SylvaNova** gaming community. Featu
    - For production, add your production callback URL too
    - Copy the Client ID and Client Secret into `.env.local`
 
-4. **Run locally**
+5. **Configure Discord bot (announcements)**
+
+   In the same Discord Application (or a dedicated bot app):
+
+   - Go to **Bot** → reset/copy token → set `DISCORD_BOT_TOKEN`
+   - Invite the bot to your server with **View Channel** and **Read Message History**
+   - Enable **Server Members Intent** if nicknames/role colors do not appear (optional for REST member lookups in most cases)
+   - Copy your server ID (`DISCORD_GUILD_ID`) and announcement channel ID (`DISCORD_ANNOUNCEMENT_CHANNEL_ID`)
+
+   Announcements appear as cycling notification cards on the landing page. Posts with `@everyone` are shown first and stay visible longer.
+
+6. **Run locally**
 
    ```bash
    npm run dev
@@ -94,6 +109,9 @@ Production environment variables:
 
 ```
 DISCORD_REDIRECT_URI=https://yourdomain.com/api/auth/callback/discord
+DISCORD_BOT_TOKEN=<bot-token>
+DISCORD_GUILD_ID=<server-id>
+DISCORD_ANNOUNCEMENT_CHANNEL_ID=<channel-id>
 NEXT_PUBLIC_BASE_URL=https://yourdomain.com
 SESSION_SECRET=<strong-random-secret>
 ```
@@ -121,6 +139,9 @@ Edit [`lib/constants.ts`](lib/constants.ts) to change:
 - `TAGLINE` — hero tagline text
 - `DISCORD_INVITE_URL` — Discord invite link when ready
 - `SEASON_DURATION_MS` — duration of each season in the cycle
+- `ANNOUNCEMENT_CACHE_TTL_MS` — how often the server re-fetches Discord messages
+- `ANNOUNCEMENT_EVERYONE_DURATION_MS` — display time for `@everyone` posts
+- `ANNOUNCEMENT_CYCLE_DURATION_MS` — rotation interval for normal posts
 
 ## Project Structure
 
@@ -128,7 +149,7 @@ Edit [`lib/constants.ts`](lib/constants.ts) to change:
 app/              Next.js App Router pages and API routes
 components/       UI and scene components
 hooks/            Time-of-day, season cycle, theme hooks
-lib/              Colors, constants, Discord OAuth, session
+lib/              Colors, constants, Discord OAuth, bot API, announcements
 ```
 
 ## License

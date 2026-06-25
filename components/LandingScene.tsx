@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnnouncementNotifications } from "@/components/AnnouncementNotifications";
 import { Hero } from "@/components/Hero";
 import { ShoutboxTrigger } from "@/components/ShoutboxTrigger";
 import { LandscapeBackground } from "@/components/LandscapeBackground";
@@ -48,6 +49,7 @@ export function LandingScene() {
       <ParticleField season={season} reducedMotion={reducedMotion} />
       <div className="landing-overlay" />
       <Hero />
+      <AnnouncementNotifications />
       <ShoutboxTrigger reducedMotion={reducedMotion} />
     </div>
   );
