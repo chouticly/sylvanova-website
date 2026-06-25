@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import Script from "next/script";
-import { cookies } from "next/headers";
 import {
-  getWelcomeTitle,
   getWelcomeTitleBootstrapScript,
-  VISIT_MARKER,
+  PAGE_TITLE,
 } from "@/lib/welcome-title";
 import "./globals.css";
 
@@ -24,21 +22,15 @@ const bodyFont = DM_Sans({
 const SITE_DESCRIPTION =
   "SylvaNova is a gaming community grove taking root. Something new is growing — check back soon.";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const cookieStore = await cookies();
-  const hasVisited = cookieStore.get(VISIT_MARKER)?.value === "1";
-  const title = getWelcomeTitle(hasVisited);
-
-  return {
-    title,
-    description: SITE_DESCRIPTION,
-    openGraph: {
-      title,
-      description: "A gaming community grove taking root.",
-      type: "website",
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: PAGE_TITLE,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: PAGE_TITLE,
+    description: "A gaming community grove taking root.",
+    type: "website",
+  },
+};
 
 export default function RootLayout({
   children,
