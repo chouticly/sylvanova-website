@@ -15,11 +15,11 @@ const bodyFont = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SylvaNova — Coming Soon",
+  title: "SylvaNova — Welcome Home!",
   description:
     "SylvaNova is a gaming community grove taking root. Something new is growing — check back soon.",
   openGraph: {
-    title: "SylvaNova — Coming Soon",
+    title: "SylvaNova — Welcome Home!",
     description: "A gaming community grove taking root.",
     type: "website",
   },

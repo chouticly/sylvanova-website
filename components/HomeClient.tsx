@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic";
 
+import { useWelcomeTitle } from "@/hooks/useWelcomeTitle";
+
 const LandingScene = dynamic(
   () => import("@/components/LandingScene").then((mod) => mod.LandingScene),
   {
@@ -11,5 +13,7 @@ const LandingScene = dynamic(
 );
 
 export function HomeClient() {
+  useWelcomeTitle();
+
   return <LandingScene />;
 }

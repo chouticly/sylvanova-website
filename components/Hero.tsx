@@ -15,9 +15,9 @@ export function Hero() {
         <p className="hero-description">
           SylvaNova is a gaming community that is taking root.
           <br />
-          We&apos;re building something special, so check back soon
+          We&apos;re building something special, so join us.
           <br />
-          ... and tell Ova I said, &quot;Hi.&quot;
+          Ova can&apos;t wait to meet you.
         </p>
       </div>
       <div className="hero-actions">
