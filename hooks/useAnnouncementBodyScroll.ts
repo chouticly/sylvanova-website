@@ -136,11 +136,23 @@ export function useAnnouncementBodyScroll({
   const ignoreUserScrollUntil = useRef(0);
   const pausedRef = useRef(paused);
   const userControlledRef = useRef(userControlled);
+  const scrollSignalRef = useRef<ScrollSignal | null>(null);
 
   onFinishedRef.current = onFinished;
   onUserControlRef.current = onUserControl;
   pausedRef.current = paused;
   userControlledRef.current = userControlled;
+
+  const cancelAutoScroll = () => {
+    const signal = scrollSignalRef.current;
+    if (!signal) return;
+
+    signal.cancelled = true;
+    cancelAnimationFrame(signal.rafId);
+    signal.timeouts.forEach(clearTimeout);
+    scrollSignalRef.current = null;
+    isAutoScrolling.current = false;
+  };
 
   const suppressUserScroll = (ms = 300) => {
     ignoreUserScrollUntil.current = performance.now() + ms;
@@ -150,6 +162,11 @@ export function useAnnouncementBodyScroll({
         isAutoScrolling.current = false;
       }
     }, ms + 50);
+  };
+
+  const claimUserControl = () => {
+    cancelAutoScroll();
+    onUserControlRef.current();
   };
 
   useEffect(() => {
@@ -168,13 +185,17 @@ export function useAnnouncementBodyScroll({
       if (event.isTrusted) onUserControlRef.current();
     };
 
+    const handleTouchStart = () => {
+      claimUserControl();
+    };
+
     body.addEventListener("wheel", handleWheel, { passive: true });
-    body.addEventListener("touchstart", handleUserScroll, { passive: true });
+    body.addEventListener("touchstart", handleTouchStart, { passive: true });
     body.addEventListener("scroll", handleUserScroll, { passive: true });
 
     return () => {
       body.removeEventListener("wheel", handleWheel);
-      body.removeEventListener("touchstart", handleUserScroll);
+      body.removeEventListener("touchstart", handleTouchStart);
       body.removeEventListener("scroll", handleUserScroll);
     };
   }, [announcementId]);
@@ -190,6 +211,7 @@ export function useAnnouncementBodyScroll({
       rafId: 0,
       timeouts: [],
     };
+    scrollSignalRef.current = signal;
 
     const isPaused = () =>
       pausedRef.current || userControlledRef.current;
@@ -241,6 +263,9 @@ export function useAnnouncementBodyScroll({
       isAutoScrolling.current = false;
       cancelAnimationFrame(signal.rafId);
       signal.timeouts.forEach(clearTimeout);
+      if (scrollSignalRef.current === signal) {
+        scrollSignalRef.current = null;
+      }
     };
   }, [announcementId, reducedMotion, userControlled]);
 

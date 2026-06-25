@@ -460,11 +460,15 @@ body {
 
 .shoutbox-messages {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
 }
 
 .shoutbox-message {
@@ -781,6 +785,9 @@ body {
   scroll-behavior: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
 }
 
 .announcement-content {
