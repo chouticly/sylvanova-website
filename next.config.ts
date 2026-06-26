@@ -1,4 +1,20 @@
+import createNextJsObfuscator from "nextjs-obfuscator";
 import type { NextConfig } from "next";
+
+const withObfuscator = createNextJsObfuscator(
+  {
+    compact: true,
+    disableConsoleOutput: false,
+    identifierNamesGenerator: "hexadecimal",
+    simplify: true,
+    stringArray: true,
+    stringArrayRotate: true,
+  },
+  {
+    enabled: "detect",
+    log: false,
+  }
+);
 
 const nextConfig: NextConfig = {
   output: "standalone",
@@ -13,4 +29,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withObfuscator(nextConfig);
