@@ -1,3 +1,5 @@
+import type { AnnouncementTextPart } from "./announcement-model";
+
 const DISCORD_API = "https://discord.com/api/v10";
 
 export interface DiscordUser {
@@ -172,12 +174,6 @@ export function resolveAvatarUrl(
 export function hasEveryoneMention(message: DiscordMessage): boolean {
   return message.mention_everyone || /@everyone\b/i.test(message.content);
 }
-
-export type AnnouncementTextPart =
-  | { type: "text"; value: string }
-  | { type: "everyone"; value: string }
-  | { type: "role"; value: string; color: string | null }
-  | { type: "channel"; value: string; url: string };
 
 const DISCORD_TOKEN_PATTERN =
   /<@&(\d+)>|<@!?(\d+)>|<#(\d+)>|<a?:\w+:\d+>|@everyone\b|@here\b/gi;

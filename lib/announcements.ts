@@ -2,6 +2,7 @@ import {
   ANNOUNCEMENT_CACHE_TTL_MS,
   ANNOUNCEMENT_MAX_MESSAGES,
 } from "./constants";
+import type { Announcement, AnnouncementEmbed } from "./announcement-model";
 import {
   buildDiscordMessageUrl,
   fetchChannelMessages,
@@ -14,37 +15,19 @@ import {
   resolveAvatarUrl,
   resolveNickname,
   resolveRoleColor,
-  type AnnouncementTextPart,
   type DiscordEmbed,
   type DiscordGuildChannel,
   type DiscordMessage,
   type DiscordRole,
 } from "./discord-bot";
 
-export type { AnnouncementTextPart };
-
-export interface AnnouncementEmbed {
-  titleParts?: AnnouncementTextPart[];
-  descriptionParts?: AnnouncementTextPart[];
-  url?: string;
-  imageUrl?: string;
-}
-
-export interface AnnouncementAuthor {
-  nickname: string;
-  avatarUrl: string;
-  roleColor: string | null;
-}
-
-export interface Announcement {
-  id: string;
-  createdAt: string;
-  mentionEveryone: boolean;
-  discordUrl: string;
-  author: AnnouncementAuthor;
-  contentParts: AnnouncementTextPart[];
-  embeds: AnnouncementEmbed[];
-}
+export type {
+  Announcement,
+  AnnouncementAuthor,
+  AnnouncementEmbed,
+  AnnouncementTextPart,
+} from "./announcement-model";
+export { announcementHasBody } from "./announcement-model";
 
 interface AnnouncementCache {
   data: Announcement[];
@@ -149,19 +132,4 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
 export function getAnnouncementCacheTtlSeconds(): number {
   return Math.floor(ANNOUNCEMENT_CACHE_TTL_MS / 1000);
-}
-
-function hasEmbedContent(embed: AnnouncementEmbed): boolean {
-  return Boolean(
-    embed.titleParts?.length ||
-      embed.descriptionParts?.length ||
-      embed.imageUrl
-  );
-}
-
-export function announcementHasBody(announcement: Announcement): boolean {
-  return (
-    announcement.contentParts.length > 0 ||
-    announcement.embeds.some(hasEmbedContent)
-  );
 }

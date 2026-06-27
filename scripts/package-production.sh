@@ -8,8 +8,7 @@ ARCHIVE="$ROOT/release/sylvanova-website.tar.gz"
 cd "$ROOT"
 
 echo "Installing dependencies..."
-# next.config.ts needs build-time packages even when NODE_ENV is production.
-NODE_ENV=development npm ci
+npm ci
 
 echo "Building production bundle..."
 npm run build

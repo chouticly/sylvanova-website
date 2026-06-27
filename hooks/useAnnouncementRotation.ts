@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { Announcement } from "@/lib/announcements";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { Announcement } from "@/lib/announcement-model";
 
 function buildRotationQueue(announcements: Announcement[]): Announcement[] {
   const everyone = announcements.filter((a) => a.mentionEveryone);
@@ -13,7 +13,10 @@ export function useAnnouncementRotation(announcements: Announcement[]) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const seenEveryoneIds = useRef<Set<string>>(new Set());
-  const queue = buildRotationQueue(announcements);
+  const queue = useMemo(
+    () => buildRotationQueue(announcements),
+    [announcements]
+  );
 
   useEffect(() => {
     setReducedMotion(

@@ -5,7 +5,11 @@ import { AnnouncementFormattedText, partsHaveContent } from "@/components/Announ
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 import { useAnnouncementBodyScroll } from "@/hooks/useAnnouncementBodyScroll";
 import { useAnnouncementRotation } from "@/hooks/useAnnouncementRotation";
-import { announcementHasBody, type Announcement, type AnnouncementEmbed } from "@/lib/announcements";
+import {
+  announcementHasBody,
+  type Announcement,
+  type AnnouncementEmbed,
+} from "@/lib/announcement-model";
 
 function formatRelativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime();

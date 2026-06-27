@@ -1,6 +1,6 @@
 "use client";
 
-import type { AnnouncementTextPart } from "@/lib/announcements";
+import type { AnnouncementTextPart } from "@/lib/announcement-model";
 
 function roleMentionStyle(color: string | null): React.CSSProperties {
   if (!color) {

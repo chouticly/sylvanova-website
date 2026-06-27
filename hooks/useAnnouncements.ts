@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   ANNOUNCEMENT_POLL_INTERVAL_MS,
 } from "@/lib/constants";
-import type { Announcement } from "@/lib/announcements";
+import type { Announcement } from "@/lib/announcement-model";
 
 interface AnnouncementsResponse {
   announcements: Announcement[];
