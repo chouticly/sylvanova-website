@@ -1,6 +1,6 @@
 export const SITE_NAME = "SylvaNova";
 
-export const COMPANY_NAME = "SylvaNova, LLC";
+export const COMPANY_NAME = "SylvaNova LLC";
 
 export const COMPANY_TAGLINE = "Gaming community";
 
